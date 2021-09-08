@@ -13,6 +13,8 @@ document.getElementById('addItem').addEventListener('click', event => {
       const itemElem = document.createElement('div')
       itemElem.innerHTML = `
         <p>${item.text}</p>
+        <button class="isDone" data-text="${item.text}">${item.isDone ? 'Done' : 'Not Done'}</button>
+        <button class="delete" data-text="${item.text}">X</button>
         <hr>
       `
       document.getElementById('items').append(itemElem)
@@ -22,12 +24,38 @@ document.getElementById('addItem').addEventListener('click', event => {
     .catch(err => console.error(err))
 })
 
+document.addEventListener('click', event => {
+  if (event.target.className === 'delete') {
+    const text = event.target.dataset.text
+    axios.delete(`/items/${text}`)
+      .then(() => event.target.parentNode.remove())
+      .catch(err => console.error(err))
+  }
+})
+
+document.addEventListener('click', event => {
+  if (event.target.className === 'isDone') {
+    const text = event.target.dataset.text
+
+    axios.put(`/items/${text}`)
+      .then(() => {
+        if (event.target.textContent === 'Done') {
+          event.target.textContent = 'Not Done'
+        } else {
+          event.target.textContent = 'Done'
+        }
+      })
+      .catch(err => console.error(err))
+  }
+})
 axios.get('/items')
   .then(({ data: items }) => {
     items.forEach(item => {
       const itemElem = document.createElement('div')
       itemElem.innerHTML = `
         <p>${item.text}</p>
+        <button class="isDone" data-text="${item.text}">${item.isDone ? 'Done' : 'Not Done'}</button>
+        <button class="delete" data-text="${item.text}">X</button>
         <hr>
       `
       document.getElementById('items').append(itemElem)
