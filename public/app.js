@@ -8,7 +8,7 @@ document.getElementById('addItem').addEventListener('click', event => {
     isDone: false
   }
 
-  axios.post('/items', item)
+  axios.post('/api/items', item)
     .then(() => {
       const itemElem = document.createElement('div')
       itemElem.innerHTML = `
@@ -27,7 +27,7 @@ document.getElementById('addItem').addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.className === 'delete') {
     const text = event.target.dataset.text
-    axios.delete(`/items/${text}`)
+    axios.delete(`/api/items/${text}`)
       .then(() => event.target.parentNode.remove())
       .catch(err => console.error(err))
   }
@@ -37,7 +37,7 @@ document.addEventListener('click', event => {
   if (event.target.className === 'isDone') {
     const text = event.target.dataset.text
 
-    axios.put(`/items/${text}`)
+    axios.put(`/api/items/${text}`)
       .then(() => {
         if (event.target.textContent === 'Done') {
           event.target.textContent = 'Not Done'
@@ -48,7 +48,8 @@ document.addEventListener('click', event => {
       .catch(err => console.error(err))
   }
 })
-axios.get('/items')
+
+axios.get('/api/items')
   .then(({ data: items }) => {
     items.forEach(item => {
       const itemElem = document.createElement('div')
