@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { items } = require('../db')
+let { items } = require('../db')
 
 router.get('/items', (req, res) => {
   res.json(items)
